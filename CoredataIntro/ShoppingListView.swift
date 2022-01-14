@@ -22,10 +22,17 @@ struct ShoppingListView: View {
     var items: FetchedResults<Item>
     
     init(filter : String) {
-        _items = FetchRequest<Item>(
-            sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
-            predicate: NSPredicate(format: "name BEGINSWITH %@", filter),
-            animation: .default)
+        if filter == "" {
+            _items = FetchRequest<Item>(
+                sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
+              //  predicate: NSPredicate(format: "name BEGINSWITH %@", filter),
+                animation: .default)
+        } else {
+            _items = FetchRequest<Item>(
+                sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
+                predicate: NSPredicate(format: "name BEGINSWITH %@", filter),
+                animation: .default)
+        }
     }
     
     
@@ -60,7 +67,7 @@ struct ShoppingListView: View {
     
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
-            offsets.map { items[$0] }.forEach(viewContext.delete)
+            //offsets.map { items[$0] }.forEach(viewContext.delete)
             
             for index in offsets {
                 let item = items[index]
